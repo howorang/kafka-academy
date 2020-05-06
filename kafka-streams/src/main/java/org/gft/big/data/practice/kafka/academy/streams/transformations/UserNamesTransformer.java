@@ -1,5 +1,6 @@
 package org.gft.big.data.practice.kafka.academy.streams.transformations;
 
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStream;
 import org.gft.big.data.practice.kafka.academy.model.User;
 
@@ -11,7 +12,10 @@ import org.gft.big.data.practice.kafka.academy.model.User;
  */
 public class UserNamesTransformer {
 
-    public KStream<?, String> transform(KStream<?, User> usersStream){
-        return null;
+    public KStream<?, String> transform(KStream<?, User> usersStream) {
+        return usersStream
+                .filter((key, val) -> val.getName().startsWith("A"))
+                .filter((key, val) -> val.getAge() < 18)
+                .map((key, val) -> new KeyValue<>(key, val.getName() + " " + val.getSurname()));
     }
 }
